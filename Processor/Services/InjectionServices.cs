@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Processor.Infrastructure;
 using Processor.Infrastructure.Repositories;
 using Processor.Model.Interfaces;
@@ -20,7 +21,6 @@ namespace Processor.Services
 
             //Репозиторий
             services.AddScoped<IIncidentService, IncidentService>();
-
 			services.AddHttpContextAccessor();
 
 			return services;
