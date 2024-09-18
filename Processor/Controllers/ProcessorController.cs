@@ -11,10 +11,10 @@ namespace Processor.Controllers
 	[ApiController]
 	public class ProcessorController : ControllerBase
 	{
-		private readonly IIncidentService _incidentRepository;
-		public ProcessorController(IIncidentService incidentRepository)
+		private readonly IIncidentService _incidentService;
+		public ProcessorController(IIncidentService incidentService)
         {
-			_incidentRepository = incidentRepository;
+			_incidentService = incidentService;
 
 		}
 		/// <summary>
@@ -25,7 +25,7 @@ namespace Processor.Controllers
 		[HttpGet]
 		public async Task<IActionResult> GetAllIncident()
 		{
-			var incidents = await _incidentRepository.GetAllIncidents();
+			var incidents = await _incidentService.GetAllIncidents();
 
 			return Ok(incidents);
 		}
@@ -44,7 +44,7 @@ namespace Processor.Controllers
 				return BadRequest("Invalid data.");
 			}
 
-			await _incidentRepository.AddIncidentWithEvent(eventDTO);
+			await _incidentService.AddIncidentWithEvent(eventDTO);
 
 			return Ok();
 		}

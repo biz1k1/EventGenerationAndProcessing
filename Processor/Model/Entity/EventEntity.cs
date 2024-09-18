@@ -24,8 +24,9 @@ namespace Generator.Model.Entity
 		public DateTime Time { get; set; }
 
 		/// <summary>
-		/// Индицент события
+		/// Список инцидентов событий
 		/// </summary>
+		/// 
 		public List<IncidentEntity> Incident { get; set; } = [];
 	}
 }
