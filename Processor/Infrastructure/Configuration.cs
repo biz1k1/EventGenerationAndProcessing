@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Generator.Model.Entity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Processor.Model.Entity;
 
@@ -14,5 +15,18 @@ namespace Processor.Infrastructure
 			builder.HasKey(x => x.Id);
 			builder.Property(x => x.Id).ValueGeneratedOnAdd();
 		}
+
+	
+	}public class EventConfiguration : IEntityTypeConfiguration<EventEntity>
+	{
+		public void Configure(EntityTypeBuilder<EventEntity> builder)
+		{
+			builder.HasKey(x => x.Id);
+			builder.Property(x => x.Id).ValueGeneratedOnAdd();
+			builder
+				.HasMany(x => x.Incident)
+				.WithMany(x => x.Events);
+		}
+
 	}
 }

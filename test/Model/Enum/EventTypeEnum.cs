@@ -7,6 +7,7 @@
 	public enum EventTypeEnum
 	{
 		FirstEvent=1,
+
 		SecondEvent=2
 	}
 }

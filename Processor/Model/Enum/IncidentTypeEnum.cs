@@ -7,6 +7,7 @@
 	public enum IncidentTypeEnum
 	{
 		FirstIncident=1,
+
 		SecondIncident=2
 	}
 }

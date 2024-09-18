@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Generator.Model.Entity;
+using Microsoft.EntityFrameworkCore;
 using Processor.Model.Entity;
 namespace Processor.Infrastructure
 {
@@ -15,5 +16,6 @@ namespace Processor.Infrastructure
 			modelBuilder.ApplyConfiguration(new IncidentConfiguration());
 		}
 		public DbSet<IncidentEntity> Incident { get; set; }
+		public DbSet<EventEntity> Events { get; set; }
 	}
 }

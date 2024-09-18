@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 using Processor.Infrastructure;
-using Processor.Model.Intrefaces;
-using Processor.Services.BackgroundServices;
+using Processor.Infrastructure.Repositories;
+using Processor.Model.Interfaces;
 
 namespace Processor.Services
 {
@@ -16,13 +15,14 @@ namespace Processor.Services
             // Подключение к бд
             services.AddDbContext<DataContext>(options => options.UseNpgsql(configuration.GetConnectionString("Pgsql")));
 
-            services.AddHttpClient();
-			// Сервис для получения ивентов
-			services.AddHostedService<HttpProcessorService>();
-
+            //Логгер
 			services.AddLogging(builder => builder.AddConsole());
 
-			services.AddSingleton<IMyDbContextFactory, MyDbContextFactory>();
+            //Репозиторий
+            services.AddScoped<IIncidentService, IncidentService>();
+
+			services.AddHttpContextAccessor();
+
 			return services;
         }
     }

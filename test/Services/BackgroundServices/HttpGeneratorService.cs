@@ -1,28 +1,33 @@
 ﻿using System.Text;
 using System.Text.Json;
 using Generator.Model.Entity;
-
+using Generator.Model.Enum;
+using Generator.Model.Interfaces;
 namespace Generator.Services.BackgroundServices
 {
+	/// <summary>
+	/// Класс для автоматических и постоянных сервисов
+	/// </summary>
 	public class HttpGeneratorService : BackgroundService
 	{
-		private readonly IHttpClientFactory _httpClient;
 		private readonly ILogger<HttpGeneratorService> _logger;
-		private readonly TimeSpan _interval = TimeSpan.FromSeconds(5);
-		public HttpGeneratorService(IHttpClientFactory httpClient,ILogger<HttpGeneratorService> logger)
+		private readonly TimeSpan _interval = TimeSpan.FromSeconds(30);
+		private readonly IHttpPostingEvent _httpPostingEvent;
+		public HttpGeneratorService(ILogger<HttpGeneratorService> logger, IHttpPostingEvent httpPostingEvent)
 		{
-			_httpClient = httpClient;
 			_logger = logger;
+			_httpPostingEvent = httpPostingEvent;
 		}
 
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 		{
-			var httpClient = _httpClient.CreateClient();
+
 			try
 			{
 				while (!stoppingToken.IsCancellationRequested)
 				{
-					await PostEventAsync(httpClient);
+
+					await _httpPostingEvent.PostEventAsync(EventTypeEnum.FirstEvent);
 
 					await Task.Delay(_interval, stoppingToken);
 				}
@@ -32,30 +37,6 @@ namespace Generator.Services.BackgroundServices
 			{
 				_logger.LogError(ex.Message);
 			}
-		}
-
-		private async Task PostEventAsync(HttpClient httpClient)
-		{
-			using StringContent jsonContent = new(
-				JsonSerializer.Serialize(new EventEntity
-				{
-					EventType= Model.Enum.EventTypeEnum.FirstEvent,
-					Time=DateTime.Now
-				}),
-			Encoding.UTF8,
-			"application/json");
-
-			var response = await httpClient.PostAsync("https://localhost:7182/", jsonContent);
-
-			if (response.IsSuccessStatusCode)
-			{
-				_logger.LogDebug(response.StatusCode.ToString());
-			}
-			else
-			{
-				_logger.LogError("Запрос не был передан"+response.Content);
-			}
-
 		}
 	}
 }
